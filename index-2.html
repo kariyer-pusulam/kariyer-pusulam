@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kariyer Pusulan</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --black:#0f0d0a; --off-black:#1a1710; --dark:#242018; --mid:#3d3828;
+  --warm-gray:#8c8270; --light-gray:#c4b9a8; --cream:#f5f0e8;
+  --off-white:#faf8f4; --gold:#b8822a; --gold-light:#d4a255;
+  --gold-pale:#e8d4b0; --border:rgba(180,160,120,.15);
+  --border-mid:rgba(180,160,120,.25);
+}
+body { font-family:'DM Sans',sans-serif; background:var(--off-white); color:var(--black); line-height:1.6; overflow-x:hidden; }
+
+/* ── PAGE SYSTEM ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:90;
+  padding:1.4rem 4rem;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(250,248,244,.93); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo {
+  font-family:'Libre Baskerville',serif; font-size:.9rem; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--black);
+  text-decoration:none; cursor:pointer;
+}
+.nav-links { display:flex; align-items:center; gap:2.5rem; }
+.nav-links a {
+  font-size:.82rem; color:var(--warm-gray); text-decoration:none;
+  letter-spacing:.02em; transition:color .2s; cursor:pointer;
+}
+.nav-links a:hover, .nav-links a.active { color:var(--black); }
+.nav-btn {
+  font-size:.82rem; font-weight:500; color:var(--black); background:transparent;
+  border:1px solid var(--black); padding:.5rem 1.25rem; border-radius:2px;
+  text-decoration:none; transition:all .2s; letter-spacing:.02em; cursor:pointer;
+}
+.nav-btn:hover { background:var(--black); color:var(--off-white); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh; padding:10rem 4rem 6rem;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  position:relative; background:var(--black); overflow:hidden;
+}
+.hero-texture {
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.02) 79px,rgba(255,255,255,.02) 80px),
+    repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.02) 79px,rgba(255,255,255,.02) 80px);
+}
+.hero-inner { position:relative; z-index:2; max-width:1200px; width:100%; }
+.hero-sup {
+  font-size:.72rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold-light); margin-bottom:2rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.hero-sup::before { content:''; display:block; width:32px; height:1px; background:var(--gold-light); }
+.hero-title {
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(3rem,6.5vw,6.5rem); font-weight:400;
+  line-height:1.05; letter-spacing:-.03em; color:var(--off-white);
+  margin-bottom:2.5rem; max-width:820px;
+}
+.hero-title em { font-style:italic; color:var(--gold-light); }
+.hero-bottom {
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:3rem; flex-wrap:wrap; padding-top:3rem;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.hero-desc { font-size:1rem; color:var(--light-gray); line-height:1.8; max-width:440px; font-weight:300; }
+.hero-actions { display:flex; align-items:center; gap:1.25rem; flex-shrink:0; }
+.btn-fill {
+  font-size:.85rem; font-weight:500; color:var(--black); background:var(--off-white);
+  padding:.85rem 2rem; border-radius:2px; text-decoration:none; border:none;
+  cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:.02em;
+  transition:all .2s; display:inline-block;
+}
+.btn-fill:hover { background:var(--cream); transform:translateY(-1px); }
+.btn-line {
+  font-size:.85rem; font-weight:400; color:var(--light-gray); background:transparent;
+  padding:.85rem 1.5rem; border-radius:2px; text-decoration:none;
+  border:1px solid rgba(255,255,255,.2); cursor:pointer;
+  font-family:'DM Sans',sans-serif; letter-spacing:.02em; transition:all .2s; display:inline-block;
+}
+.btn-line:hover { border-color:rgba(255,255,255,.5); color:var(--off-white); }
+
+/* ── MARQUEE ── */
+.marquee-wrap { overflow:hidden; background:var(--gold); padding:.85rem 0; }
+.marquee-track {
+  display:flex; gap:4rem; animation:marquee 24s linear infinite;
+  white-space:nowrap; width:max-content;
+}
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.marquee-item {
+  font-size:.68rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--black); display:flex; align-items:center; gap:1rem;
+}
+.marquee-sep { width:3px; height:3px; border-radius:50%; background:rgba(0,0,0,.3); }
+
+/* ── LAYOUT ── */
+section { position:relative; }
+.container { max-width:1200px; margin:0 auto; padding:0 4rem; }
+.section-label {
+  font-size:.68rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--warm-gray); display:flex; align-items:center; gap:.85rem; margin-bottom:1.5rem;
+}
+.section-label::before { content:''; display:block; width:24px; height:1px; background:var(--warm-gray); }
+
+/* ── HOW ── */
+.how { padding:8rem 0; background:var(--off-white); }
+.how-head { display:flex; align-items:flex-start; justify-content:space-between; gap:4rem; margin-bottom:5rem; }
+.how-title {
+  font-family:'Libre Baskerville',serif; font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:400; line-height:1.2; max-width:480px;
+}
+.how-desc { font-size:.92rem; color:var(--warm-gray); line-height:1.8; max-width:360px; padding-top:.5rem; font-weight:300; }
+.how-steps { display:grid; grid-template-columns:repeat(4,1fr); border-left:1px solid var(--border-mid); }
+.how-step {
+  padding:2.5rem 2rem; border-right:1px solid var(--border-mid);
+  border-top:1px solid var(--border-mid); border-bottom:1px solid var(--border-mid);
+}
+.step-n { font-family:'Libre Baskerville',serif; font-size:.7rem; color:var(--light-gray); letter-spacing:.1em; margin-bottom:2rem; }
+.step-title { font-family:'Libre Baskerville',serif; font-size:1.1rem; font-weight:400; color:var(--black); margin-bottom:.85rem; }
+.step-desc { font-size:.82rem; color:var(--warm-gray); line-height:1.75; }
+.step-time { margin-top:1.5rem; font-size:.68rem; letter-spacing:.1em; color:var(--light-gray); text-transform:uppercase; }
+
+/* ── WHY ── */
+.why { padding:8rem 0; background:var(--black); color:var(--off-white); }
+.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:8rem; align-items:start; }
+.why .section-label { color:var(--gold-light); }
+.why .section-label::before { background:var(--gold-light); }
+.why-title { font-family:'Libre Baskerville',serif; font-size:clamp(2rem,3vw,2.8rem); color:var(--off-white); margin-bottom:1.5rem; font-weight:400; }
+.why-body { font-size:.9rem; color:var(--light-gray); line-height:1.85; font-weight:300; margin-bottom:2.5rem; }
+.why-stats { display:flex; gap:2.5rem; flex-wrap:wrap; }
+.why-stat-num { font-family:'Libre Baskerville',serif; font-size:2.2rem; font-weight:400; color:var(--off-white); letter-spacing:-.03em; line-height:1; margin-bottom:.3rem; }
+.why-stat-label { font-size:.75rem; color:var(--warm-gray); font-weight:300; }
+.why-right { padding-top:.5rem; }
+.why-item { padding:1.75rem 0; border-bottom:1px solid rgba(255,255,255,.07); }
+.why-item:first-child { border-top:1px solid rgba(255,255,255,.07); }
+.why-num { font-family:'Libre Baskerville',serif; font-size:.68rem; color:var(--gold-light); letter-spacing:.1em; margin-bottom:.6rem; }
+.why-item-title { font-size:.95rem; font-weight:500; color:var(--off-white); margin-bottom:.4rem; }
+.why-item-desc { font-size:.82rem; color:rgba(196,185,168,.65); line-height:1.7; font-weight:300; }
+
+/* ── PRICING ── */
+.pricing { padding:8rem 0; background:var(--cream); }
+.pricing-head { margin-bottom:4rem; }
+.pricing-title { font-family:'Libre Baskerville',serif; font-size:clamp(2rem,3.5vw,3rem); font-weight:400; margin-top:1rem; max-width:520px; }
+.pricing-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border-mid); border:1px solid var(--border-mid); max-width:860px; }
+.price-card { background:var(--off-white); padding:3rem; }
+.price-card.featured { background:var(--black); color:var(--off-white); }
+.price-tier { font-size:.68rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--warm-gray); margin-bottom:2rem; }
+.price-card.featured .price-tier { color:var(--gold-light); }
+.price-amount { font-family:'Libre Baskerville',serif; font-size:3.5rem; font-weight:400; letter-spacing:-.03em; line-height:1; margin-bottom:.4rem; }
+.price-period { font-size:.78rem; color:var(--warm-gray); margin-bottom:2.5rem; font-weight:300; }
+.price-card.featured .price-period { color:var(--light-gray); }
+.price-divider { height:1px; background:var(--border-mid); margin-bottom:2rem; }
+.price-card.featured .price-divider { background:rgba(255,255,255,.1); }
+.price-items { list-style:none; display:flex; flex-direction:column; gap:.85rem; margin-bottom:2.5rem; }
+.price-item { font-size:.85rem; color:var(--mid); display:flex; align-items:flex-start; gap:.75rem; line-height:1.5; }
+.price-card.featured .price-item { color:var(--light-gray); }
+.pi-mark { width:14px; height:14px; border:1px solid var(--border-mid); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; font-size:.55rem; color:var(--gold); }
+.price-card.featured .pi-mark { border-color:rgba(255,255,255,.15); color:var(--gold-light); }
+.price-item.off .pi-mark { color:var(--light-gray); }
+.price-item.off { opacity:.4; }
+.price-cta { width:100%; padding:.9rem; font-size:.85rem; font-weight:500; font-family:'DM Sans',sans-serif; letter-spacing:.04em; cursor:pointer; border-radius:2px; transition:all .2s; }
+.price-cta.dark { background:var(--black); color:var(--off-white); border:1px solid var(--black); }
+.price-cta.dark:hover { background:var(--dark); }
+.price-cta.light { background:var(--off-white); color:var(--black); border:1px solid var(--off-white); }
+.price-cta.light:hover { background:var(--cream); }
+
+/* ── FAQ ── */
+.faq { padding:8rem 0; background:var(--off-white); }
+.faq-grid { display:grid; grid-template-columns:1fr 2fr; gap:6rem; align-items:start; }
+.faq-title { font-family:'Libre Baskerville',serif; font-size:clamp(1.8rem,2.5vw,2.4rem); font-weight:400; margin-top:.75rem; max-width:260px; }
+.faq-list { border-top:1px solid var(--border-mid); }
+.faq-item { border-bottom:1px solid var(--border-mid); }
+.faq-q { width:100%; display:flex; align-items:center; justify-content:space-between; padding:1.5rem 0; background:none; border:none; cursor:pointer; text-align:left; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; color:var(--black); gap:1rem; }
+.faq-plus { width:22px; height:22px; border:1px solid var(--border-mid); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.75rem; color:var(--warm-gray); transition:all .2s; }
+.faq-item.open .faq-plus { background:var(--black); color:var(--off-white); border-color:var(--black); transform:rotate(45deg); }
+.faq-a { overflow:hidden; max-height:0; transition:max-height .35s ease; }
+.faq-a-inner { padding-bottom:1.5rem; font-size:.85rem; color:var(--warm-gray); line-height:1.8; font-weight:300; max-width:560px; }
+.faq-item.open .faq-a { max-height:220px; }
+
+/* ── FOOTER ── */
+footer { background:var(--off-black); padding:4rem; }
+.footer-inner { max-width:1200px; margin:0 auto; display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; flex-wrap:wrap; }
+.footer-logo { font-family:'Libre Baskerville',serif; font-size:.9rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--cream); margin-bottom:.6rem; }
+.footer-desc { font-size:.75rem; color:var(--warm-gray); }
+.footer-links { display:flex; gap:2rem; flex-wrap:wrap; }
+.footer-links a { font-size:.75rem; color:var(--warm-gray); text-decoration:none; cursor:pointer; transition:color .2s; }
+.footer-links a:hover { color:var(--cream); }
+
+/* ══════════════════════════════
+   BLOG SAYFASI
+══════════════════════════════ */
+.blog-hero {
+  padding:9rem 4rem 5rem;
+  background:var(--black); position:relative; overflow:hidden;
+}
+.blog-hero-texture {
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.02) 79px,rgba(255,255,255,.02) 80px),
+    repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.02) 79px,rgba(255,255,255,.02) 80px);
+}
+.blog-hero-inner { position:relative; z-index:2; max-width:1200px; margin:0 auto; }
+.blog-hero-sup { font-size:.72rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-light); margin-bottom:1.5rem; display:flex; align-items:center; gap:1rem; }
+.blog-hero-sup::before { content:''; display:block; width:32px; height:1px; background:var(--gold-light); }
+.blog-hero-title { font-family:'Libre Baskerville',serif; font-size:clamp(2.5rem,5vw,5rem); font-weight:400; color:var(--off-white); line-height:1.1; letter-spacing:-.03em; margin-bottom:1.25rem; max-width:720px; }
+.blog-hero-desc { font-size:.95rem; color:var(--light-gray); line-height:1.8; max-width:520px; font-weight:300; }
+
+/* Blog filters */
+.blog-filters { padding:2rem 4rem; border-bottom:1px solid var(--border-mid); background:var(--off-white); position:sticky; top:72px; z-index:80; }
+.blog-filters-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+.filter-btn { font-size:.75rem; font-weight:500; letter-spacing:.06em; padding:.45rem 1rem; border-radius:2px; border:1px solid var(--border-mid); background:transparent; color:var(--warm-gray); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+.filter-btn:hover { border-color:var(--black); color:var(--black); }
+.filter-btn.active { background:var(--black); color:var(--off-white); border-color:var(--black); }
+.filter-sep { width:1px; height:20px; background:var(--border-mid); }
+
+/* Blog grid */
+.blog-section { padding:5rem 4rem; background:var(--off-white); }
+.blog-section-inner { max-width:1200px; margin:0 auto; }
+
+.blog-featured { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border-mid); border:1px solid var(--border-mid); margin-bottom:5rem; }
+.blog-card { background:var(--off-white); position:relative; overflow:hidden; cursor:pointer; transition:background .2s; }
+.blog-card:hover { background:var(--cream); }
+.blog-card-inner { padding:2.5rem; }
+.blog-card.large .blog-card-inner { padding:3rem; }
+
+.blog-card-meta { display:flex; align-items:center; gap:.75rem; margin-bottom:1.25rem; }
+.blog-tag { font-size:.62rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:.2rem .6rem; border-radius:1px; }
+.blog-tag.free { background:rgba(184,130,42,.12); color:var(--gold); border:1px solid rgba(184,130,42,.25); }
+.blog-tag.premium { background:rgba(15,13,10,.07); color:var(--mid); border:1px solid var(--border-mid); }
+.blog-tag.locked { background:var(--black); color:var(--cream); }
+.blog-date { font-size:.72rem; color:var(--light-gray); }
+.blog-author-line { font-size:.72rem; color:var(--warm-gray); margin-left:auto; }
+
+.blog-card-title { font-family:'Libre Baskerville',serif; font-size:1.25rem; font-weight:400; line-height:1.3; color:var(--black); margin-bottom:.75rem; letter-spacing:-.01em; }
+.blog-card.large .blog-card-title { font-size:1.6rem; }
+.blog-card-excerpt { font-size:.83rem; color:var(--warm-gray); line-height:1.7; margin-bottom:1.5rem; font-weight:300; }
+.blog-card-footer { display:flex; align-items:center; justify-content:space-between; }
+.blog-author { display:flex; align-items:center; gap:.6rem; }
+.author-avatar { width:28px; height:28px; border-radius:50%; background:var(--cream); border:1px solid var(--border-mid); display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:600; color:var(--warm-gray); flex-shrink:0; }
+.author-name { font-size:.75rem; color:var(--mid); font-weight:500; }
+.author-title { font-size:.68rem; color:var(--warm-gray); }
+.blog-read-more { font-size:.75rem; color:var(--warm-gray); letter-spacing:.06em; display:flex; align-items:center; gap:.4rem; }
+
+/* Lock overlay */
+.blog-lock {
+  position:absolute; inset:0; background:rgba(250,248,244,.92);
+  backdrop-filter:blur(4px); display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:.75rem;
+  opacity:0; transition:opacity .2s;
+}
+.blog-card:hover .blog-lock { opacity:1; }
+.lock-icon { font-size:1.4rem; }
+.lock-text { font-size:.8rem; font-weight:500; color:var(--black); text-align:center; max-width:180px; line-height:1.5; }
+.lock-btn { font-size:.75rem; font-weight:600; color:var(--off-white); background:var(--black); padding:.5rem 1.25rem; border-radius:2px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:.25rem; }
+
+/* Blog grid küçük */
+.blog-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-mid); border:1px solid var(--border-mid); }
+.blog-grid-label { font-family:'Libre Baskerville',serif; font-size:1.4rem; font-weight:400; color:var(--black); margin-bottom:2rem; }
+
+/* Article page */
+.article-page { padding:8rem 4rem 6rem; background:var(--off-white); }
+.article-inner { max-width:760px; margin:0 auto; }
+.article-back { font-size:.78rem; color:var(--warm-gray); cursor:pointer; display:inline-flex; align-items:center; gap:.4rem; margin-bottom:2.5rem; letter-spacing:.04em; border:none; background:none; font-family:'DM Sans',sans-serif; transition:color .2s; }
+.article-back:hover { color:var(--black); }
+.article-meta { display:flex; align-items:center; gap:1rem; margin-bottom:1.75rem; }
+.article-title { font-family:'Libre Baskerville',serif; font-size:clamp(1.8rem,3vw,2.8rem); font-weight:400; line-height:1.2; letter-spacing:-.02em; margin-bottom:1.5rem; }
+.article-author { display:flex; align-items:center; gap:.75rem; padding:1.25rem 0; border-top:1px solid var(--border-mid); border-bottom:1px solid var(--border-mid); margin-bottom:2.5rem; }
+.article-author-info .name { font-size:.85rem; font-weight:500; color:var(--black); }
+.article-author-info .title { font-size:.75rem; color:var(--warm-gray); }
+.article-body { font-size:.97rem; line-height:1.9; color:var(--mid); }
+.article-body p { margin-bottom:1.5rem; }
+.article-body h2 { font-family:'Libre Baskerville',serif; font-size:1.4rem; font-weight:400; color:var(--black); margin:2.5rem 0 1rem; }
+.article-body h3 { font-family:'Libre Baskerville',serif; font-size:1.1rem; font-weight:400; color:var(--black); margin:2rem 0 .75rem; }
+.article-body blockquote { border-left:2px solid var(--gold); padding:.75rem 0 .75rem 1.5rem; margin:2rem 0; font-style:italic; color:var(--warm-gray); font-family:'Libre Baskerville',serif; }
+
+/* Article lock */
+.article-lock { background:var(--cream); border:1px solid var(--border-mid); border-radius:2px; padding:3rem; text-align:center; margin-top:3rem; }
+.article-lock-title { font-family:'Libre Baskerville',serif; font-size:1.4rem; font-weight:400; margin-bottom:.75rem; }
+.article-lock-desc { font-size:.88rem; color:var(--warm-gray); line-height:1.7; max-width:420px; margin:0 auto 2rem; }
+
+/* ── MODAL ── */
+.overlay { position:fixed; inset:0; background:rgba(10,8,5,.78); backdrop-filter:blur(6px); z-index:200; display:none; align-items:center; justify-content:center; padding:1.5rem; }
+.overlay.open { display:flex; }
+.modal { background:var(--off-white); width:100%; max-width:500px; max-height:92vh; overflow-y:auto; border-radius:2px; position:relative; }
+.modal-bar { height:2px; background:var(--gold); }
+.modal-head { padding:2rem 2.5rem 0; display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.5rem; }
+.modal-title { font-family:'Libre Baskerville',serif; font-size:1.5rem; font-weight:400; letter-spacing:-.02em; }
+.modal-x { width:32px; height:32px; background:none; border:1px solid var(--border-mid); border-radius:2px; cursor:pointer; font-size:1rem; color:var(--warm-gray); display:flex; align-items:center; justify-content:center; transition:all .2s; flex-shrink:0; }
+.modal-x:hover { background:var(--black); color:var(--off-white); border-color:var(--black); }
+.modal-tabs { display:flex; border-bottom:1px solid var(--border-mid); padding:0 2.5rem; }
+.mtab { font-size:.8rem; font-weight:500; color:var(--warm-gray); padding:.75rem 0; margin-right:2rem; border-bottom:2px solid transparent; cursor:pointer; letter-spacing:.02em; transition:all .2s; background:none; border-top:none; border-left:none; border-right:none; font-family:'DM Sans',sans-serif; }
+.mtab.active { color:var(--black); border-bottom-color:var(--black); }
+.modal-body { padding:2rem 2.5rem 2.5rem; }
+.tab-pane { display:none; }
+.tab-pane.active { display:block; }
+.frow { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-bottom:.6rem; }
+.frow.one { grid-template-columns:1fr; }
+.fg { display:flex; flex-direction:column; gap:.3rem; }
+.fg label { font-size:.7rem; font-weight:500; color:var(--mid); letter-spacing:.04em; }
+.fg input,.fg select { background:#fff; border:1px solid var(--border-mid); border-radius:2px; padding:.65rem .85rem; font-size:.85rem; font-family:'DM Sans',sans-serif; color:var(--black); outline:none; transition:border-color .2s; width:100%; -webkit-appearance:none; }
+.fg input:focus,.fg select:focus { border-color:var(--black); }
+.fg input::placeholder { color:var(--light-gray); }
+.fg .hint { font-size:.67rem; color:var(--light-gray); }
+.del-label { font-size:.7rem; font-weight:500; color:var(--mid); letter-spacing:.04em; margin-bottom:.5rem; }
+.del-row { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-bottom:1.25rem; }
+.del-opt { border:1px solid var(--border-mid); border-radius:2px; padding:.85rem; cursor:pointer; transition:all .15s; }
+.del-opt:hover { border-color:var(--black); }
+.del-opt.active { border-color:var(--black); background:var(--cream); }
+.del-opt-title { font-size:.8rem; font-weight:500; color:var(--black); margin-bottom:.15rem; }
+.del-opt-desc { font-size:.68rem; color:var(--warm-gray); line-height:1.4; }
+.del-note { font-size:.73rem; color:var(--warm-gray); line-height:1.6; margin-bottom:.85rem; }
+.form-submit { width:100%; padding:.9rem; background:var(--black); color:var(--off-white); border:none; border-radius:2px; font-size:.85rem; font-weight:500; font-family:'DM Sans',sans-serif; letter-spacing:.04em; cursor:pointer; transition:background .2s; margin-top:.5rem; }
+.form-submit:hover { background:var(--dark); }
+.form-note { font-size:.72rem; color:var(--warm-gray); text-align:center; margin-top:.85rem; }
+.form-note a { color:var(--black); text-decoration:none; border-bottom:1px solid var(--border-mid); cursor:pointer; }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .7s ease,transform .7s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav { padding:1.2rem 1.5rem; }
+  .nav-links { display:none; }
+  .hero,.blog-hero,.blog-filters,.blog-section,.article-page { padding-left:1.5rem; padding-right:1.5rem; }
+  .container { padding:0 1.5rem; }
+  .how-head { flex-direction:column; gap:1.5rem; }
+  .how-steps { grid-template-columns:1fr 1fr; }
+  .why-grid { grid-template-columns:1fr; gap:3rem; }
+  .pricing-grid { grid-template-columns:1fr; }
+  .faq-grid { grid-template-columns:1fr; gap:2.5rem; }
+  .blog-featured { grid-template-columns:1fr; }
+  .blog-grid { grid-template-columns:1fr 1fr; }
+  footer { padding:2.5rem 1.5rem; }
+  .footer-inner { flex-direction:column; align-items:flex-start; }
+}
+@media(max-width:600px){
+  .blog-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="main-nav">
+  <span class="nav-logo" onclick="showPage('home')">Kariyer Pusulan</span>
+  <div class="nav-links">
+    <a onclick="showPage('home');scrollTo('#how')" id="nl-how">Nasıl Çalışır</a>
+    <a onclick="showPage('home');scrollTo('#why')" id="nl-why">Neden Biz</a>
+    <a onclick="showPage('home');scrollTo('#pricing')" id="nl-pricing">Fiyatlar</a>
+    <a onclick="showPage('blog')" id="nl-blog">Blog</a>
+    <span class="nav-btn" onclick="openModal('login')">Giriş</span>
+  </div>
+</nav>
+
+<!-- ═══════════ ANA SAYFA ═══════════ -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-texture"></div>
+    <div class="hero-inner">
+      <div class="hero-sup">Uzman PDR Danışmanlığı</div>
+      <h1 class="hero-title">
+        Hangi meslekte<br>
+        <em>gerçekten</em><br>
+        başarılı olacaksın?
+      </h1>
+      <div class="hero-bottom">
+        <p class="hero-desc">Uzman psikolog ve PDR danışmanlarımız tarafından hazırlanan iki katmanlı değerlendirme: standart sorular ve gerçek yaşam durumlarına dayalı derinlemesine case study'ler. Kişisel raporun 48 saat içinde hazır.</p>
+        <div class="hero-actions">
+          <span class="btn-fill" onclick="openModal('register')">Değerlendirmeni Başlat</span>
+          <span class="btn-line" onclick="scrollTo('#how')">Nasıl çalışır</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">Uzman Psikolog<span class="marquee-sep"></span></span>
+      <span class="marquee-item">PDR Danışmanlığı<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Mesleki Değerlendirme<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Kişilik Analizi<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Kariyer Yönlendirme<span class="marquee-sep"></span></span>
+      <span class="marquee-item">48 Saat Teslimat<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Online Görüşme<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Lise Öğrencileri<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Uzman Psikolog<span class="marquee-sep"></span></span>
+      <span class="marquee-item">PDR Danışmanlığı<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Mesleki Değerlendirme<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Kişilik Analizi<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Kariyer Yönlendirme<span class="marquee-sep"></span></span>
+      <span class="marquee-item">48 Saat Teslimat<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Online Görüşme<span class="marquee-sep"></span></span>
+      <span class="marquee-item">Lise Öğrencileri<span class="marquee-sep"></span></span>
+    </div>
+  </div>
+
+  <section class="how" id="how">
+    <div class="container">
+      <div class="how-head reveal">
+        <div>
+          <div class="section-label">Süreç</div>
+          <h2 class="how-title">Dört adımda kişisel kariyer raporun</h2>
+        </div>
+        <p class="how-desc">Değerlendirmemiz iki katmandan oluşuyor: standart yönelim soruları ve gerçek yaşam durumlarına dayalı derinlemesine case study'ler. İkisinin birlikte analizi çok daha isabetli sonuçlar veriyor.</p>
+      </div>
+      <div class="how-steps">
+        <div class="how-step reveal">
+          <div class="step-n">01</div>
+          <div class="step-title">Mesleki İlgi Değerlendirmesi</div>
+          <p class="step-desc">Uzman psikologlarımız tarafından hazırlanan standart yönelim soruları ve <strong>gerçek yaşam senaryolarına dayalı derinlemesine case study'ler.</strong> "Bu durumda ne yapardın?" türündeki sorular, yüzeysel cevapların çok ötesine geçiyor.</p>
+          <div class="step-time">Kendi hızında tamamlanabilir</div>
+        </div>
+        <div class="how-step reveal" style="transition-delay:.08s">
+          <div class="step-n">02</div>
+          <div class="step-title">Kişilik Değerlendirmesi</div>
+          <p class="step-desc">Psikometrik sorular ve <strong>derinlemesine kişilik case study'leri</strong> içeren iki katmanlı yapı. Sadece "ben böyleyim" demek değil; gerçek anılara ve yaşanmış durumlara dayalı cevaplar vereceksin. Bu, çok daha isabetli bir profil çıkarıyor.</p>
+          <div class="step-time">Kendi hızında tamamlanabilir</div>
+        </div>
+        <div class="how-step reveal" style="transition-delay:.16s">
+          <div class="step-n">03</div>
+          <div class="step-title">Uzman Analizi</div>
+          <p class="step-desc">Psikolog ve PDR danışmanlarımız değerlendirme sonuçlarını titizlikle inceler, sana uygun kariyer yollarını belirler.</p>
+          <div class="step-time">Uzman incelemesi</div>
+        </div>
+        <div class="how-step reveal" style="transition-delay:.24s">
+          <div class="step-n">04</div>
+          <div class="step-title">Kişisel Rapor</div>
+          <p class="step-desc">Sadece sana özel hazırlanmış kariyer ve kişilik raporu. İsteğe bağlı uzmanla birebir görüşme seçeneği.</p>
+          <div class="step-time">48 saat içinde</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why" id="why">
+    <div class="container">
+      <div class="why-grid">
+        <div class="reveal">
+          <div class="section-label">Neden Kariyer Pusulan</div>
+          <h2 class="why-title">Doğru karar için doğru değerlendirme</h2>
+          <p class="why-body">Üniversite tercih döneminin baskısında, sadece puan ve sıralamayla verilen kararlar çoğu zaman yanlış çıkıyor. Biz kişiliğini, ilgi alanlarını ve çalışma biçimini birlikte değerlendiren kapsamlı bir yaklaşım sunuyoruz. Standart sorularla birlikte, <strong style="color:var(--off-white)">gerçek yaşam durumlarına dayalı derinlemesine case study'ler</strong> sayesinde yüzeysel cevapların çok ötesine geçiyoruz. Uzman psikolog ve PDR danışmanlarımız her raporu bizzat inceliyor.</p>
+          <div class="why-stats">
+            <div><div class="why-stat-num">2</div><div class="why-stat-label">Değerlendirme boyutu</div></div>
+            <div><div class="why-stat-num">48s</div><div class="why-stat-label">Rapor teslim süresi</div></div>
+            <div><div class="why-stat-num">1:1</div><div class="why-stat-label">Uzman görüşmesi</div></div>
+          </div>
+        </div>
+        <div class="why-right reveal" style="transition-delay:.1s">
+          <div class="why-item">
+            <div class="why-num">01</div>
+            <div class="why-item-title">Standart sorular + derinlemesine case study'ler</div>
+            <p class="why-item-desc">Değerlendirmemiz iki katmandan oluşuyor. Standart yönelim soruları genel profili ortaya koyarken, gerçek yaşam durumlarına dayalı case study'ler o profilin derinliğini ve nüanslarını açığa çıkarıyor.</p>
+          </div>
+          <div class="why-item">
+            <div class="why-num">02</div>
+            <div class="why-item-title">Derinlemesine kişilik analizi</div>
+            <p class="why-item-desc">Kişilik yapın, duygusal örüntülerin ve çalışma tarzın psikometrik yöntemlerle kapsamlı biçimde incelenir.</p>
+          </div>
+          <div class="why-item">
+            <div class="why-num">03</div>
+            <div class="why-item-title">Kişiselleştirilmiş meslek önerileri</div>
+            <p class="why-item-desc">İki değerlendirmenin kesiştiği noktadan, sana en uygun meslekler öncelik sırasıyla listelenir. Her öneri gerekçesiyle birlikte sunulur.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="pricing-head reveal">
+        <div class="section-label">Fiyatlar</div>
+        <h2 class="pricing-title">Kariyer yatırımın bir kez yapılır</h2>
+      </div>
+      <div class="pricing-grid reveal" style="transition-delay:.1s">
+        <div class="price-card">
+          <div class="price-tier">Temel Paket</div>
+          <div class="price-amount">299 <span style="font-size:1.1rem;font-family:'DM Sans';font-weight:300;">TL</span></div>
+          <div class="price-period">Tek seferlik ödeme</div>
+          <div class="price-divider"></div>
+          <ul class="price-items">
+            <li class="price-item"><span class="pi-mark">+</span>Mesleki ilgi ve yönelim değerlendirmesi</li>
+            <li class="price-item"><span class="pi-mark">+</span>Derinlemesine kişilik analizi</li>
+            <li class="price-item"><span class="pi-mark">+</span>Kişiselleştirilmiş meslek önerileri</li>
+            <li class="price-item"><span class="pi-mark">+</span>Üniversite bölüm rehberliği</li>
+            <li class="price-item"><span class="pi-mark">+</span>2-3 sayfalık kişisel rapor</li>
+            <li class="price-item off"><span class="pi-mark">—</span>Uzman görüşmesi dahil değil</li>
+          </ul>
+          <button class="price-cta dark" onclick="openPayment('temel')">Başla</button>
+        </div>
+        <div class="price-card featured">
+          <div class="price-tier">Uzman Paketi</div>
+          <div class="price-amount">649 <span style="font-size:1.1rem;font-family:'DM Sans';font-weight:300;color:#c4b9a8;">TL</span></div>
+          <div class="price-period">Rapor + uzman görüşmesi</div>
+          <div class="price-divider"></div>
+          <ul class="price-items">
+            <li class="price-item"><span class="pi-mark">+</span>Temel paketteki her şey</li>
+            <li class="price-item"><span class="pi-mark">+</span>20 dk birebir online uzman görüşmesi</li>
+            <li class="price-item"><span class="pi-mark">+</span>Raporun PDR uzmanı tarafından yorumu</li>
+            <li class="price-item"><span class="pi-mark">+</span>Sorularını doğrudan uzmanına sor</li>
+            <li class="price-item"><span class="pi-mark">+</span>Aile görüşmeye katılabilir</li>
+          </ul>
+          <button class="price-cta light" onclick="openPayment('uzman')">Başla</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="faq-grid">
+        <div class="reveal">
+          <div class="section-label">Sorular</div>
+          <h2 class="faq-title">Aklındaki sorular</h2>
+        </div>
+        <div class="faq-list reveal" style="transition-delay:.1s">
+          <div class="faq-item">
+            <button class="faq-q" onclick="togFaq(this)"><span>Raporumu kim hazırlıyor?</span><span class="faq-plus">+</span></button>
+            <div class="faq-a"><div class="faq-a-inner">Değerlendirme sorularımız uzman psikologlarımız tarafından hazırlandı. Her rapor, PDR uzmanlarımızın incelemesinden geçerek sana ulaşıyor.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="togFaq(this)"><span>Raporum ne zaman hazır oluyor?</span><span class="faq-plus">+</span></button>
+            <div class="faq-a"><div class="faq-a-inner">Değerlendirmeyi tamamladıktan sonra raporun 48 saat içinde hazırlanıyor ve seçtiğin yöntemle iletiliyor.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="togFaq(this)"><span>Case study nedir, neden kullanıyorsunuz?</span><span class="faq-plus">+</span></button>
+            <div class="faq-a"><div class="faq-a-inner">Case study, gerçek yaşam durumlarına dayalı derinlemesine sorulardır. Örneğin "Grup çalışmasında bazı arkadaşlar üstlerine düşeni yapmıyor, sen ne yaparsın?" gibi. Standart sorular genel bir profil verir; case study'ler ise o profilin arkasındaki gerçek davranış kalıplarını, motivasyonları ve değerleri ortaya çıkarır. İkisini birlikte analiz etmek çok daha isabetli bir rapor sağlıyor.</div></div>
+          </div>
+            <div class="faq-a"><div class="faq-a-inner">Değerlendirmemiz standart sorulardan ve derinlemesine case study'lerden oluşuyor. Her iki bölümde de kendi hızında ilerleyebilirsin, ara verip kaldığın yerden devam edebilirsin. Süre tamamen sana kalmış — önemli olan değerlendirmeye gerçekten odaklanman.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="togFaq(this)"><span>Uzman görüşmesini sonradan alabilir miyim?</span><span class="faq-plus">+</span></button>
+            <div class="faq-a"><div class="faq-a-inner">Evet. Temel paketi aldıktan sonra raporu okuyup uzman görüşmesini ayrıca satın alabilirsin.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="togFaq(this)"><span>Bilgilerim güvende mi?</span><span class="faq-plus">+</span></button>
+            <div class="faq-a"><div class="faq-a-inner">Tüm veriler şifreli şekilde saklanıyor, üçüncü taraflarla kesinlikle paylaşılmıyor.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="togFaq(this)"><span>Hangi sınıflar için uygun?</span><span class="faq-plus">+</span></button>
+            <div class="faq-a"><div class="faq-a-inner">9. sınıftan mezun öğrencilere kadar herkese uygun. Erken değerlendirme doğru bölüme hazırlanmak için çok daha fazla zaman tanıyor.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Kariyer Pusulan</div>
+        <div class="footer-desc">Uzman PDR danışmanlığı &mdash; Lise öğrencileri için</div>
+      </div>
+      <div class="footer-links">
+        <a onclick="showPage('blog')">Blog</a>
+        <a>Gizlilik Politikası</a>
+        <a>Kullanım Şartları</a>
+        <a>İletişim</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════ BLOG LİSTESİ ═══════════ -->
+<div class="page" id="page-blog">
+
+  <div class="blog-hero">
+    <div class="blog-hero-texture"></div>
+    <div class="blog-hero-inner">
+      <div class="blog-hero-sup">Uzman Yazıları</div>
+      <h1 class="blog-hero-title">Psikolog ve PDR<br>uzmanlarımızdan</h1>
+      <p class="blog-hero-desc">Kariyer seçimi, kişilik gelişimi ve üniversite süreci hakkında uzmanlarımızın kaleme aldığı yazılar.</p>
+    </div>
+  </div>
+
+  <div class="blog-filters">
+    <div class="blog-filters-inner">
+      <button class="filter-btn active" onclick="filterBlog('all',this)">Tümü</button>
+      <button class="filter-btn" onclick="filterBlog('kariyer',this)">Kariyer</button>
+      <button class="filter-btn" onclick="filterBlog('kisilik',this)">Kişilik</button>
+      <button class="filter-btn" onclick="filterBlog('universite',this)">Üniversite</button>
+      <button class="filter-btn" onclick="filterBlog('ebeveyn',this)">Ebeveynler İçin</button>
+      <div class="filter-sep"></div>
+      <button class="filter-btn" onclick="filterBlog('free',this)">Herkese Açık</button>
+      <button class="filter-btn" onclick="filterBlog('premium',this)">Rapor Sahiplerine</button>
+    </div>
+  </div>
+
+  <div class="blog-section">
+    <div class="blog-section-inner">
+
+      <!-- Öne çıkan yazılar -->
+      <div class="blog-featured" id="blog-featured">
+
+        <div class="blog-card large" data-cat="kariyer" data-access="free" onclick="showArticle('artikel-1')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag free">Herkese Açık</span>
+              <span class="blog-date">12 Ocak 2025</span>
+              <span class="blog-author-line">Psk. Ayşe Kaya</span>
+            </div>
+            <h2 class="blog-card-title">Lise yıllarında meslek seçimi neden bu kadar zor?</h2>
+            <p class="blog-card-excerpt">Kimlik gelişiminin en yoğun yaşandığı dönemde büyük kararlar vermek zorunda kalan gençlerin psikolojik süreçlerini anlamak, doğru yönlendirmenin ilk adımıdır.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">AK</div>
+                <div>
+                  <div class="author-name">Psk. Ayşe Kaya</div>
+                  <div class="author-title">Klinik Psikolog</div>
+                </div>
+              </div>
+              <span class="blog-read-more">Okumaya devam et &rarr;</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card large" data-cat="kisilik" data-access="premium" onclick="showArticle('artikel-2')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag locked">Rapor Sahiplerine Özel</span>
+              <span class="blog-date">8 Ocak 2025</span>
+              <span class="blog-author-line">PDR Uzm. Mert Demir</span>
+            </div>
+            <h2 class="blog-card-title">Kişilik tipiniz iş yaşamında sizi nasıl şekillendiriyor?</h2>
+            <p class="blog-card-excerpt">Raporunuzdaki kişilik profilinizi okurken dikkat etmeniz gereken nüanslar ve bu bilgileri günlük hayatınıza nasıl yansıtabileceğiniz üzerine derinlemesine bir rehber.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">MD</div>
+                <div>
+                  <div class="author-name">PDR Uzm. Mert Demir</div>
+                  <div class="author-title">PDR Uzmanı</div>
+                </div>
+              </div>
+              <span class="blog-read-more">Okumaya devam et &rarr;</span>
+            </div>
+          </div>
+          <div class="blog-lock">
+            <div class="lock-icon">&#128274;</div>
+            <div class="lock-text">Bu içerik rapor sahiplerine özeldir</div>
+            <button class="lock-btn" onclick="event.stopPropagation();openModal('register')">Rapor Al</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tüm yazılar -->
+      <div class="blog-grid-label reveal">Tüm Yazılar</div>
+      <div class="blog-grid" id="blog-grid">
+
+        <div class="blog-card" data-cat="universite" data-access="free" onclick="showArticle('artikel-3')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag free">Herkese Açık</span>
+              <span class="blog-date">3 Ocak 2025</span>
+            </div>
+            <h2 class="blog-card-title">YKS sürecinde kaygıyla başa çıkmanın 5 yolu</h2>
+            <p class="blog-card-excerpt">Sınav döneminin getirdiği baskı ve kaygı, doğru yönetildiğinde motivasyona dönüşebilir.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">SY</div>
+                <div>
+                  <div class="author-name">Psk. Selin Yılmaz</div>
+                  <div class="author-title">Okul Psikoloğu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="kariyer" data-access="premium" onclick="showArticle('artikel-4')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag locked">Rapor Sahiplerine Özel</span>
+              <span class="blog-date">28 Aralık 2024</span>
+            </div>
+            <h2 class="blog-card-title">Raporunuzu aldıktan sonra ne yapmalısınız?</h2>
+            <p class="blog-card-excerpt">Kariyer raporunuzdaki verileri aile ile paylaşma, bölüm araştırması yapma ve sonraki adımları planlama rehberi.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">MD</div>
+                <div>
+                  <div class="author-name">PDR Uzm. Mert Demir</div>
+                  <div class="author-title">PDR Uzmanı</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="blog-lock">
+            <div class="lock-icon">&#128274;</div>
+            <div class="lock-text">Bu içerik rapor sahiplerine özeldir</div>
+            <button class="lock-btn" onclick="event.stopPropagation();openModal('register')">Rapor Al</button>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="ebeveyn" data-access="free" onclick="showArticle('artikel-5')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag free">Herkese Açık</span>
+              <span class="blog-date">20 Aralık 2024</span>
+            </div>
+            <h2 class="blog-card-title">Ebeveyn olarak çocuğunuzun meslek seçimine nasıl destek olabilirsiniz?</h2>
+            <p class="blog-card-excerpt">Yönlendirme ile yönlendirme arasındaki ince çizgi ve çocuğunuzun özgün kararını desteklemenin yolları.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">AK</div>
+                <div>
+                  <div class="author-name">Psk. Ayşe Kaya</div>
+                  <div class="author-title">Klinik Psikolog</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="kisilik" data-access="premium" onclick="showArticle('artikel-6')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag locked">Rapor Sahiplerine Özel</span>
+              <span class="blog-date">15 Aralık 2024</span>
+            </div>
+            <h2 class="blog-card-title">İçe dönük birinin kariyer dünyasında güçlü yanları</h2>
+            <p class="blog-card-excerpt">İçe dönüklük bir zayıflık değil, doğru çevrede muazzam bir avantajdır. Raporunuzdaki profil bu yazıyla anlam kazanır.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">SY</div>
+                <div>
+                  <div class="author-name">Psk. Selin Yılmaz</div>
+                  <div class="author-title">Okul Psikoloğu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="blog-lock">
+            <div class="lock-icon">&#128274;</div>
+            <div class="lock-text">Bu içerik rapor sahiplerine özeldir</div>
+            <button class="lock-btn" onclick="event.stopPropagation();openModal('register')">Rapor Al</button>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="universite" data-access="free" onclick="showArticle('artikel-7')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag free">Herkese Açık</span>
+              <span class="blog-date">10 Aralık 2024</span>
+            </div>
+            <h2 class="blog-card-title">Üniversite bölümü seçerken sormanız gereken 7 soru</h2>
+            <p class="blog-card-excerpt">Puan yeterliliğinin ötesinde, kendinize sormalısınız: Bu bölümde dört yıl geçirmek nasıl hissettirir?</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">MD</div>
+                <div>
+                  <div class="author-name">PDR Uzm. Mert Demir</div>
+                  <div class="author-title">PDR Uzmanı</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="kariyer" data-access="premium" onclick="showArticle('artikel-8')">
+          <div class="blog-card-inner">
+            <div class="blog-card-meta">
+              <span class="blog-tag locked">Rapor Sahiplerine Özel</span>
+              <span class="blog-date">5 Aralık 2024</span>
+            </div>
+            <h2 class="blog-card-title">Sosyal kişiliklerin güçlendiği meslekler ve neden?</h2>
+            <p class="blog-card-excerpt">İnsanlarla çalışmaktan enerji alan kişilik yapısına sahipseniz, hangi kariyer ortamlarında en verimli olacağınızı detaylıca inceliyoruz.</p>
+            <div class="blog-card-footer">
+              <div class="blog-author">
+                <div class="author-avatar">AK</div>
+                <div>
+                  <div class="author-name">Psk. Ayşe Kaya</div>
+                  <div class="author-title">Klinik Psikolog</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="blog-lock">
+            <div class="lock-icon">&#128274;</div>
+            <div class="lock-text">Bu içerik rapor sahiplerine özeldir</div>
+            <button class="lock-btn" onclick="event.stopPropagation();openModal('register')">Rapor Al</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Kariyer Pusulan</div>
+        <div class="footer-desc">Uzman PDR danışmanlığı &mdash; Lise öğrencileri için</div>
+      </div>
+      <div class="footer-links">
+        <a onclick="showPage('home')">Ana Sayfa</a>
+        <a>Gizlilik Politikası</a>
+        <a>İletişim</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-blog -->
+
+<!-- ═══════════ MAKALE SAYFASI ═══════════ -->
+<div class="page" id="page-article">
+  <div class="article-page">
+    <div class="article-inner">
+      <button class="article-back" onclick="showPage('blog')">&larr; Blog'a dön</button>
+      <div class="article-meta" id="art-meta"></div>
+      <h1 class="article-title" id="art-title"></h1>
+      <div class="article-author" id="art-author"></div>
+      <div class="article-body" id="art-body"></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Kariyer Pusulan</div>
+        <div class="footer-desc">Uzman PDR danışmanlığı</div>
+      </div>
+      <div class="footer-links">
+        <a onclick="showPage('home')">Ana Sayfa</a>
+        <a onclick="showPage('blog')">Blog</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════ MODAL ═══════════ -->
+<div class="overlay" id="overlay" onclick="closeOut(event)">
+  <div class="modal">
+    <div class="modal-bar"></div>
+    <div class="modal-head">
+      <h2 class="modal-title" id="m-title">Hesap Oluştur</h2>
+      <button class="modal-x" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="mtab active" id="mt-reg" onclick="swTab('register')">Üye Ol</button>
+      <button class="mtab" id="mt-login" onclick="swTab('login')">Giriş Yap</button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-pane active" id="tp-register">
+        <div class="frow">
+          <div class="fg"><label>Ad</label><input id="f-ad" placeholder="Adın"></div>
+          <div class="fg"><label>Soyad</label><input id="f-soyad" placeholder="Soyadın"></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>Doğum Yılı</label>
+            <select id="f-dogum"><option value="">Seç</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option></select>
+          </div>
+          <div class="fg"><label>Cinsiyet</label>
+            <select id="f-cinsiyet"><option value="">Seç</option><option>Kadın</option><option>Erkek</option><option>Belirtmek istemiyorum</option></select>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>Sınıf</label>
+            <select id="f-sinif"><option value="">Seç</option><option value="9">9. Sınıf</option><option value="10">10. Sınıf</option><option value="11">11. Sınıf</option><option value="12">12. Sınıf</option><option value="mezun">Mezun</option></select>
+          </div>
+          <div class="fg"><label>İl</label>
+            <select id="f-il"><option value="">Seç</option><option>Adana</option><option>Ankara</option><option>Antalya</option><option>Bursa</option><option>Diyarbakır</option><option>Eskişehir</option><option>Gaziantep</option><option>İstanbul</option><option>İzmir</option><option>Kayseri</option><option>Kocaeli</option><option>Konya</option><option>Malatya</option><option>Mersin</option><option>Samsun</option><option>Trabzon</option><option>Diğer</option></select>
+          </div>
+        </div>
+        <div class="frow one">
+          <div class="fg"><label>E-posta</label><input id="f-email" type="email" placeholder="ornek@mail.com"><span class="hint">Raporun bu adrese gönderilecek.</span></div>
+        </div>
+        <div class="frow one">
+          <div class="fg"><label>Şifre</label><input id="f-sifre" type="password" placeholder="En az 8 karakter"></div>
+        </div>
+        <div class="del-label">Rapor teslim tercihi</div>
+        <div class="del-note">Raporun <strong>48 saat içinde</strong> hazırlanacak. Nasıl almak istersin?</div>
+        <div class="del-row">
+          <div class="del-opt active" id="d-email" onclick="selDel('email')">
+            <div class="del-opt-title">E-posta</div>
+            <div class="del-opt-desc">PDF olarak mail adresine gönderilir</div>
+          </div>
+          <div class="del-opt" id="d-profile" onclick="selDel('profile')">
+            <div class="del-opt-title">Profilime yükle</div>
+            <div class="del-opt-desc">Giriş yapınca profilinde görünür</div>
+          </div>
+        </div>
+        <button class="form-submit" onclick="doReg()">Kayıt Ol ve Başla</button>
+        <div class="form-note">Zaten üye misin? <a onclick="swTab('login')">Giriş yap</a></div>
+      </div>
+      <div class="tab-pane" id="tp-login">
+        <div class="frow one" style="margin-top:.25rem">
+          <div class="fg"><label>E-posta</label><input id="l-email" type="email" placeholder="ornek@mail.com"></div>
+        </div>
+        <div class="frow one">
+          <div class="fg"><label>Şifre</label><input id="l-sifre" type="password" placeholder="Şifren"></div>
+        </div>
+        <button class="form-submit" onclick="doLogin()">Giriş Yap</button>
+        <div class="form-note"><a>Şifremi unuttum</a> &nbsp;&middot;&nbsp; <a onclick="swTab('register')">Üye ol</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── SAYFA SİSTEMİ ── */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // nav aktif durumu
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  if (id === 'blog' || id === 'article') {
+    document.getElementById('nl-blog').classList.add('active');
+  }
+}
+
+function scrollTo(sel) {
+  setTimeout(() => {
+    const el = document.querySelector(sel);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 50);
+}
+
+/* ── BLOG FİLTRE ── */
+function filterBlog(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const allCards = document.querySelectorAll('.blog-card');
+  allCards.forEach(card => {
+    const cardCat = card.dataset.cat;
+    const cardAccess = card.dataset.access;
+    let show = false;
+    if (cat === 'all') show = true;
+    else if (cat === 'free') show = cardAccess === 'free';
+    else if (cat === 'premium') show = cardAccess === 'premium';
+    else show = cardCat === cat;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+/* ── MAKALE VERİSİ ── */
+const ARTICLES = {
+  'artikel-1': {
+    tag: 'Kariyer', access: 'free',
+    date: '12 Ocak 2025',
+    title: 'Lise yıllarında meslek seçimi neden bu kadar zor?',
+    author: 'Psk. Ayşe Kaya', authorTitle: 'Klinik Psikolog', authorInitials: 'AK',
+    body: `<p>Lise yılları, kimlik gelişiminin en yoğun biçimde yaşandığı dönemdir. Psikolog Erik Erikson'ın çerçevesiyle konuşursak, bu dönemdeki temel gelişimsel görev "Ben kimim?" sorusuna yanıt aramaktır. Ve tam bu süreçte gençlerden "Hayatımın geri kalanını ne yaparak geçireceğim?" sorusunu yanıtlamaları bekleniyor.</p>
+    <h2>Kimlik gelişimi tamamlanmadan meslek seçimi</h2>
+    <p>Sorunun özü burada yatıyor. Bir gencin hangi meslekte başarılı olacağını sağlıklı biçimde değerlendirebilmesi için önce kendini tanıması gerekir. Güçlü yönleri nelerdir? Hangi ortamlarda verimli çalışır? Ne tür işler onu motive eder? Bu sorulara verilen yanıtlar, kimlik gelişimi tamamlanmadan bulanık kalır.</p>
+    <h2>Ailenin ve çevrenin baskısı</h2>
+    <p>Bunun üzerine bir de ailenin beklentileri, arkadaş çevresinin kararları ve toplumsal "prestijli meslek" algıları ekleniyor. Tıp, hukuk, mühendislik gibi geleneksel tercihler çoğu zaman gerçek ilgi alanlarının önüne geçiyor.</p>
+    <blockquote>Bir öğrencinin kendi sesini duyabilmesi için, etrafındaki diğer seslerin biraz kısılması gerekir.</blockquote>
+    <h2>Değerlendirme süreci neden önemli?</h2>
+    <p>Kapsamlı bir kariyer değerlendirmesi bu gürültüyü azaltır. Kişilik özellikleri, ilgi alanları ve değerler nesnel biçimde ortaya konduğunda, gencin kendi sesini duyması kolaylaşır. Bu süreç bir karar vermez; karar vermeyi kolaylaştırır.</p>
+    <p>PDR danışmanlarının rolü de tam burada devreye giriyor: sonuçları yorumlamak, bağlamına oturtmak ve gencin kendi kararını özgürce vermesine alan açmak.</p>`
+  },
+  'artikel-2': {
+    tag: 'Kişilik', access: 'premium',
+    date: '8 Ocak 2025',
+    title: 'Kişilik tipiniz iş yaşamında sizi nasıl şekillendiriyor?',
+    author: 'PDR Uzm. Mert Demir', authorTitle: 'PDR Uzmanı', authorInitials: 'MD',
+    body: null // kilitli
+  },
+  'artikel-3': {
+    tag: 'Üniversite', access: 'free',
+    date: '3 Ocak 2025',
+    title: 'YKS sürecinde kaygıyla başa çıkmanın 5 yolu',
+    author: 'Psk. Selin Yılmaz', authorTitle: 'Okul Psikoloğu', authorInitials: 'SY',
+    body: `<p>Sınav kaygısı, performansı hem olumlu hem olumsuz yönde etkileyebilen çift taraflı bir olgudur. Çok az kaygı motivasyon eksikliğine, çok fazla kaygı ise blokajlara yol açar. Hedef, kaygıyı sıfırlamak değil; yönetmektir.</p>
+    <h2>1. Kaygıyı normalleştirin</h2>
+    <p>Sınav öncesi yaşanan kaygı, vücudun performans için hazırlandığının işaretidir. Bunu "bir şeyler yanlış gidiyor" olarak değil, "hazırlanıyorum" olarak yorumlamayı deneyin.</p>
+    <h2>2. Nefes egzersizleri</h2>
+    <p>4-7-8 nefes tekniği kaygı anlarında hızla yardımcı olabilir. 4 sayı nefes alın, 7 sayı tutun, 8 sayıda yavaşça verin. Günde iki kez pratik yapın.</p>
+    <h2>3. Çalışma planını gerçekçi kurun</h2>
+    <p>Erişilmez hedefler kaygıyı besler. Günlük çalışma hedeflerini küçük tutun ve her tamamladığınızda kendinizi tebrik edin. Küçük başarılar güven inşa eder.</p>
+    <h2>4. Uyku ve beslenmeyi ihmal etmeyin</h2>
+    <p>Beynin bilgiyi pekiştirmesi uyku sırasında gerçekleşir. Sınav döneminde uyku kesmek verimlilik yanılsaması yaratır, gerçekte öğrenmeyi engeller.</p>
+    <h2>5. Bir uzmandan destek alın</h2>
+    <p>Kaygı günlük işlevselliği bozacak düzeye geldiyse, bir psikolog veya PDR danışmanından destek almaktan çekinmeyin. Bu bir zayıflık değil, akıllı bir tercihtir.</p>`
+  },
+  'artikel-4': { tag: 'Kariyer', access: 'premium', date: '28 Aralık 2024', title: 'Raporunuzu aldıktan sonra ne yapmalısınız?', author: 'PDR Uzm. Mert Demir', authorTitle: 'PDR Uzmanı', authorInitials: 'MD', body: null },
+  'artikel-5': {
+    tag: 'Ebeveynler İçin', access: 'free',
+    date: '20 Aralık 2024',
+    title: 'Ebeveyn olarak çocuğunuzun meslek seçimine nasıl destek olabilirsiniz?',
+    author: 'Psk. Ayşe Kaya', authorTitle: 'Klinik Psikolog', authorInitials: 'AK',
+    body: `<p>Her ebeveyn çocuğunun iyi bir geleceğe sahip olmasını ister. Bu doğal ve güzel bir his. Ancak iyi niyetli müdahaleler zaman zaman çocuğun kendi sesini duymasını engelleyebilir.</p>
+    <h2>Yönlendirme ile yönlendirme arasındaki fark</h2>
+    <p>Bilgi vermek ve seçenekleri açmak yönlendirmedir. "Bu bölümü seçmelisin" demek ise yönlendirmedir. İki kelime benzer görünse de psikolojik etkileri çok farklıdır. Birincisi özgüvenli karar vericiler yetiştirir, ikincisi bağımlı ve kırılgan.</p>
+    <h2>Merak soruları sorun, karar soruları değil</h2>
+    <p>"Bu mesleği neden ilginç bulduğunu anlatır mısın?" sorusu, "Doktor olmayı düşünüyor musun?" sorusundan çok daha verimlidir. Merak soruları çocuğun iç sesini açar.</p>
+    <h2>Kendi kariyer hikayenizi paylaşın — dayatmadan</h2>
+    <p>Kendi deneyimlerinizi anlatmak değerlidir. "Benim mesleğimi seç" değil, "Ben bu yolda şunları öğrendim" çerçevesiyle paylaşılan deneyimler rehberlik eder, baskı yaratmaz.</p>
+    <blockquote>En iyi kariyer desteği, çocuğunuzun kendi kararını özgürce verebileceği bir alan açmaktır.</blockquote>`
+  },
+  'artikel-6': { tag: 'Kişilik', access: 'premium', date: '15 Aralık 2024', title: 'İçe dönük birinin kariyer dünyasında güçlü yanları', author: 'Psk. Selin Yılmaz', authorTitle: 'Okul Psikoloğu', authorInitials: 'SY', body: null },
+  'artikel-7': {
+    tag: 'Üniversite', access: 'free',
+    date: '10 Aralık 2024',
+    title: 'Üniversite bölümü seçerken sormanız gereken 7 soru',
+    author: 'PDR Uzm. Mert Demir', authorTitle: 'PDR Uzmanı', authorInitials: 'MD',
+    body: `<p>Üniversite bölümü seçimi, puan yeterliliğinin çok ötesinde bir karardır. Dört yıl boyunca hangi ortamda, kimlerle ve ne tür problemlerle uğraşacağınız bu kararla belirlenir.</p>
+    <h2>1. Bu bölümün mezunları ne iş yapıyor?</h2>
+    <p>Bölüm adı değil, mezunların kariyer yolları belirleyicidir. Sosyoloji mezunları ne iş bulur? İstatistik mezunları? Araştırın.</p>
+    <h2>2. Bu alanda çalışmak bana enerji verir mi, tüketir mi?</h2>
+    <p>Dışarıdan prestijli görünen işler, içeriden bitici olabilir. Bir haftasonu gönüllü çalışsaydınız, bu alanda mı çalışmak isterdiniz?</p>
+    <h2>3. Dört yıl bu konuları okumak nasıl hissettirir?</h2>
+    <p>Bir bölümün birinci sınıf ders programına bakın. Bu kitapları okumak, bu dersleri dinlemek sizi heyecanlandırıyor mu?</p>
+    <h2>4. Çalışma ortamım nasıl olacak?</h2>
+    <p>Masa başı mı, saha mı? İnsanlarla mı, verilerle mi? Kapalı alan mı, açık alan mı? Çalışma ortamı kişilikle ne kadar uyuşuyor?</p>
+    <h2>5. Bu alanda Türkiye'de kariyer olanakları neler?</h2><p>Mezun olduğunuzda iş piyasası sizi bekliyor mu? Öğretmen, mühendis, psikolog — farklı alanların Türkiye'deki talep durumu farklıdır.</p>
+    <h2>6. Ailem veya arkadaşlarım bu seçimi desteklemeseydi yine de seçer miydim?</h2><p>En önemli soru budur. Dış baskıları zihinsel olarak kaldırdığınızda geriye ne kalıyor?</p>
+    <h2>7. Beş yıl sonra bu kararla barışık olur muyum?</h2><p>Mükemmel bir karar yoktur. Ama "kendim için en iyi kararı verdim" hissiyle verilmiş bir karar, yıllar sonra bile huzur verir.</p>`
+  },
+  'artikel-8': { tag: 'Kariyer', access: 'premium', date: '5 Aralık 2024', title: 'Sosyal kişiliklerin güçlendiği meslekler ve neden?', author: 'Psk. Ayşe Kaya', authorTitle: 'Klinik Psikolog', authorInitials: 'AK', body: null }
+};
+
+function showArticle(id) {
+  const art = ARTICLES[id];
+  if (!art) return;
+
+  document.getElementById('art-meta').innerHTML =
+    `<span class="blog-tag ${art.access === 'free' ? 'free' : 'locked'}">${art.access === 'free' ? 'Herkese Açık' : 'Rapor Sahiplerine Özel'}</span>
+     <span style="font-size:.72rem;color:var(--light-gray)">${art.date}</span>`;
+
+  document.getElementById('art-title').textContent = art.title;
+
+  document.getElementById('art-author').innerHTML =
+    `<div class="author-avatar" style="width:36px;height:36px;font-size:.75rem">${art.authorInitials}</div>
+     <div class="article-author-info">
+       <div class="name">${art.author}</div>
+       <div class="title">${art.authorTitle}</div>
+     </div>`;
+
+  if (art.access === 'premium' && !art.body) {
+    document.getElementById('art-body').innerHTML =
+      `<p style="color:var(--warm-gray);font-size:.9rem;line-height:1.8">Bu yazının giriş bölümünü okuyorsunuz. Devamını görmek için değerlendirme raporuna sahip olmanız gerekiyor.</p>
+       <div class="article-lock">
+         <h3 class="article-lock-title">Bu içerik rapor sahiplerine özeldir</h3>
+         <p class="article-lock-desc">Kariyer ve kişilik değerlendirmeni tamamla, raporunu al ve tüm uzman içeriklerine eriş.</p>
+         <button class="btn-fill" style="background:var(--black);color:var(--off-white)" onclick="openModal('register')">Değerlendirmeni Başlat</button>
+       </div>`;
+  } else {
+    document.getElementById('art-body').innerHTML = art.body || '';
+  }
+
+  showPage('article');
+}
+
+/* ── MODAL ── */
+let delChoice = 'email';
+function openModal(tab) {
+  document.getElementById('overlay').classList.add('open');
+  swTab(tab);
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeOut(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function swTab(t) {
+  ['register','login'].forEach(id => {
+    document.getElementById('mt-' + (id === 'register' ? 'reg' : 'login')).classList.toggle('active', id === t);
+    document.getElementById('tp-' + id).classList.toggle('active', id === t);
+  });
+  document.getElementById('m-title').textContent = t === 'register' ? 'Hesap Oluştur' : 'Hoş Geldin';
+}
+function selDel(v) {
+  delChoice = v;
+  document.getElementById('d-email').classList.toggle('active', v === 'email');
+  document.getElementById('d-profile').classList.toggle('active', v === 'profile');
+}
+function doReg() {
+  const ids = ['f-ad','f-soyad','f-dogum','f-cinsiyet','f-sinif','f-il','f-email','f-sifre'];
+  for (const id of ids) {
+    if (!document.getElementById(id).value.trim()) { alert('Lütfen tüm alanları doldur.'); return; }
+  }
+  closeModal();
+  alert('Hesabın oluşturuldu. Değerlendirme sayfasına yönlendiriliyorsun.');
+}
+function doLogin() {
+  const e = document.getElementById('l-email').value.trim();
+  const s = document.getElementById('l-sifre').value;
+  if (!e || !s) { alert('E-posta ve şifreyi gir.'); return; }
+  closeModal();
+  alert('Giriş başarılı. Hoş geldin.');
+}
+
+/* ── FAQ ── */
+function togFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); closePaymentModal(); });
+
+// ── SHOPIER ÖDEME AKIŞI ──
+// Shopier linklerini buraya yapıştır
+const SHOPIER_LINKS = {
+  temel: 'TEMEL_PAKET_SHOPIER_LINKI',
+  uzman: 'UZMAN_PAKETI_SHOPIER_LINKI'
+};
+
+let currentPlan = '';
+
+function openPayment(plan) {
+  currentPlan = plan;
+  const modal = document.getElementById('payment-modal');
+  const planName = plan === 'temel' ? 'Temel Paket — 299 TL' : 'Uzman Paketi — 649 TL';
+  document.getElementById('payment-plan-name').textContent = planName;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePaymentModal() {
+  document.getElementById('payment-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function goToPayment() {
+  const email = document.getElementById('payment-email').value.trim();
+  const name = document.getElementById('payment-name').value.trim();
+  if (!email || !name) {
+    document.getElementById('payment-error').style.display = 'block';
+    return;
+  }
+  // Mail ve ismi localStorage'a kaydet — test tamamlanınca Make.com'a gönderilecek
+  localStorage.setItem('kp_email', email);
+  localStorage.setItem('kp_name', name);
+  localStorage.setItem('kp_plan', currentPlan);
+  // Shopier ödeme sayfasına yönlendir
+  window.location.href = SHOPIER_LINKS[currentPlan];
+}
+</script>
+
+<!-- ── ÖDEME ÖNCESİ MAİL TOPLAMA MODALI ── -->
+<div id="payment-modal" style="display:none; position:fixed; inset:0; background:rgba(15,13,10,.85); backdrop-filter:blur(8px); z-index:200; align-items:center; justify-content:center; padding:1rem;">
+  <div style="background:#faf8f4; border:1px solid rgba(180,160,120,.2); border-radius:4px; padding:2.5rem; width:100%; max-width:420px; position:relative;">
+    <button onclick="closePaymentModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.2rem; cursor:pointer; color:#8c8270;">✕</button>
+    <div style="font-family:'Libre Baskerville',serif; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:#b8822a; margin-bottom:.75rem;">Neredeyse hazır</div>
+    <h3 style="font-family:'Libre Baskerville',serif; font-size:1.4rem; color:#1a1710; margin-bottom:.5rem;">Raporun nereye gönderilsin?</h3>
+    <p id="payment-plan-name" style="font-size:.85rem; color:#8c8270; margin-bottom:1.5rem;"></p>
+    <div style="margin-bottom:1rem;">
+      <label style="display:block; font-size:.78rem; color:#3d3828; margin-bottom:.4rem; letter-spacing:.02em;">Ad Soyad</label>
+      <input id="payment-name" type="text" placeholder="Adın ve soyadın" style="width:100%; padding:.75rem 1rem; border:1px solid rgba(180,160,120,.3); border-radius:2px; background:#fff; font-family:'DM Sans',sans-serif; font-size:.9rem; color:#1a1710; outline:none;">
+    </div>
+    <div style="margin-bottom:1rem;">
+      <label style="display:block; font-size:.78rem; color:#3d3828; margin-bottom:.4rem; letter-spacing:.02em;">E-posta adresi</label>
+      <input id="payment-email" type="email" placeholder="rapor@mail.com" style="width:100%; padding:.75rem 1rem; border:1px solid rgba(180,160,120,.3); border-radius:2px; background:#fff; font-family:'DM Sans',sans-serif; font-size:.9rem; color:#1a1710; outline:none;">
+    </div>
+    <p id="payment-error" style="display:none; font-size:.8rem; color:#c0392b; margin-bottom:.75rem;">Lütfen ad ve e-posta adresini gir.</p>
+    <button onclick="goToPayment()" style="width:100%; padding:.85rem; background:#1a1710; color:#faf8f4; border:none; border-radius:2px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; letter-spacing:.03em;">Ödemeye Geç →</button>
+    <p style="font-size:.75rem; color:#c4b9a8; text-align:center; margin-top:1rem;">Raporun 48 saat içinde bu adrese gönderilecek.</p>
+  </div>
+</div>
+
+</body>
+</html>
